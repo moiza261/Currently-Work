@@ -41,44 +41,27 @@ class _LoginState extends State<Login> {
                 height: 100,
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 12, right: 12),
+                padding: const EdgeInsets.all(12.0),
                 child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height / 1.40,
+                  width: MediaQuery.of(context).size.width / 1,
+                  height: MediaQuery.of(context).size.height / 1.45,
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.grey,
-                        spreadRadius: 2,
-                        blurRadius: 3,
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
+                      borderRadius: BorderRadius.circular(5.0),
+                      color: Colors.white,
+                      boxShadow: const [
+                        BoxShadow(
+                            color: Color.fromARGB(255, 180, 104, 99),
+                            blurRadius: 4,
+                            spreadRadius: 1,
+                            blurStyle: BlurStyle.outer,
+                            offset: Offset(0, 1)),
+                      ]),
                   child: Column(
-                    children: [
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Text(
-                        'Hello',
-                        style: TextStyle(color: Colors.black, fontSize: 30),
-                      ),
-                      const Text(
-                        'Please login to your account',
-                        style: TextStyle(
-                            color: Colors.grey, fontFamily: "Poppins"),
-                      ),
-                      const Text(
-                        'Email Address',
-                        style: TextStyle(fontFamily: "Poppins"),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(14.0),
-                        child: MyTextField(
-                            "Email", 5.0, 15.0, 5.0, emailController),
-                      ),
+                    children: const [
+                      Text(
+                        'HELLO',
+                        style: TextStyle(fontFamily: ""),
+                      )
                     ],
                   ),
                 ),
