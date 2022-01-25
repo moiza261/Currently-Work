@@ -37,6 +37,9 @@ dependencies:
   hexcolor: ^2.0.6
   image_picker: ^0.8.4+4
   country_code_picker: ^2.0.2
+  google_maps_flutter: ^2.1.1
+  font_awesome_flutter: ^9.2.0
+  
 
 dev_dependencies:
   flutter_test:
@@ -87,7 +90,6 @@ flutter:
         - asset: fonts/PTSerif-Bold.ttf
         - asset: fonts/PTSerif-Regular.ttf
         - asset: fonts/NotoSerif-Bold.ttf
-        - asset: fonts/
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:
