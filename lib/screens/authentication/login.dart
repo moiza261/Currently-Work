@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mobistylez/helper/constant.dart';
 import 'package:mobistylez/helper/myTextField.dart';
+import 'package:mobistylez/screens/authentication/forgotpassword/ForgotPassword.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -46,10 +48,10 @@ class _LoginState extends State<Login> {
                 height: MediaQuery.of(context).size.height,
                 decoration:
                     const BoxDecoration(color: Colors.white, boxShadow: [
-                  BoxShadow(
-                      color: Colors.red,
-                      blurRadius: 5.0,
-                      blurStyle: BlurStyle.outer),
+                  // BoxShadow(
+                  //     color: Colors.red,
+                  //     blurRadius: 5.0,
+                  //     blurStyle: BlurStyle.outer),
                 ]),
                 child: SingleChildScrollView(
                   child: Column(
@@ -95,7 +97,7 @@ class _LoginState extends State<Login> {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Padding(
@@ -104,7 +106,7 @@ class _LoginState extends State<Login> {
                               obscureText: ishidepassword,
                               decoration: InputDecoration(
                                 labelText: "Password",
-                                labelStyle: TextStyle(
+                                labelStyle: const TextStyle(
                                     color: Colors.purple,
                                     fontSize: 16,
                                     fontFamily: "Poppins"),
@@ -133,7 +135,9 @@ class _LoginState extends State<Login> {
                       Align(
                         alignment: Alignment.centerRight,
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            openScreen(context, MyForgotPassword());
+                          },
                           child: const Text(
                             'Forgot Password?',
                             style: TextStyle(
