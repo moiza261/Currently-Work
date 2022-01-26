@@ -30,8 +30,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                   color: Color.fromARGB(255, 226, 78, 67),
                 ),
                 child: Column(
-                  children: [
-                    const ListTile(
+                  children: const[
+                     ListTile(
                       leading: CircleAvatar(
                         radius: 30,
                         child: Image(

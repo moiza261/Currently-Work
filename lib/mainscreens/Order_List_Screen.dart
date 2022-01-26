@@ -29,7 +29,7 @@ class _MyOrderListScreenState extends State<MyOrderListScreen> {
                 children: const [
                   CircleAvatar(
                     radius: 30,
-                    backgroundImage: AssetImage('Images/profile.png'),
+                    backgroundImage: AssetImage('assets/1.png'),
                   ),
                   Text(
                     "Ibtesam Ahmad",
@@ -138,8 +138,8 @@ class _MyOrderListScreenState extends State<MyOrderListScreen> {
                     size: 20,
                     color: Colors.yellow[800],
                   ),
-                  SizedBox(width: 30),
-                  Text(
+                  const SizedBox(width: 30),
+                  const Text(
                     "Earn Points",
                     style: TextStyle(
                       color: Colors.black,
@@ -158,8 +158,8 @@ class _MyOrderListScreenState extends State<MyOrderListScreen> {
                     size: 20,
                     color: Colors.brown[300],
                   ),
-                  SizedBox(width: 30),
-                  Text(
+                  const SizedBox(width: 30),
+                  const Text(
                     "Privacy Policy",
                     style: TextStyle(
                       color: Colors.black,
@@ -221,10 +221,10 @@ class _MyOrderListScreenState extends State<MyOrderListScreen> {
                   children: [
                     ListTile(
                       title: Row(
-                        children: [
+                        children: const [
                           CircleAvatar(
                             radius: 20,
-                            backgroundImage: AssetImage('Images/bike.png'),
+                            backgroundImage: AssetImage('assets/1.png'),
                           ),
                           Padding(
                             padding: EdgeInsets.only(left: 15),
