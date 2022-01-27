@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mobistylez/helper/constant.dart';
 import 'package:mobistylez/helper/myTextField.dart';
 import 'package:mobistylez/mainscreens/Order_List_Screen.dart';
+import 'package:mobistylez/mainscreens/fetchusers.dart';
 import 'package:mobistylez/mainscreens/orderlist.dart';
 import 'package:mobistylez/screens/authentication/forgotpassword/ForgotPassword.dart';
 import 'package:http/http.dart' as http;
@@ -17,10 +19,32 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  bool visible = false;
   final _formKey = GlobalKey<FormState>();
   bool ishidepassword = true;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  void login(String email, String password) async {
+    var loginApi = 'https://hello-deployment.herokuapp.com/login';
+    try {
+      http.Response response = await http.post(Uri.parse(loginApi), body: {
+        'Email': emailController.text,
+        'password': passwordController.text,
+      });
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        print(data['token']);
+        openScreen(context, FetchUsers());
+        print('Login Successfully');
+        showSnackbar(context, 'Logged In Successfully');
+      } else {
+        print('faild');
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,6 +125,7 @@ class _LoginState extends State<Login> {
                                   //   return 'Please Enter Correct Email';
                                   // }
                                 },
+                                controller: emailController,
                                 decoration: const InputDecoration(
                                   labelText: "Driver Email Address",
                                   labelStyle: TextStyle(
@@ -122,6 +147,7 @@ class _LoginState extends State<Login> {
                               padding:
                                   const EdgeInsets.only(left: 15, right: 15),
                               child: TextFormField(
+                                controller: passwordController,
                                 validator: (value) {
                                   if (value == null || value.length < 6) {
                                     return 'Password is too short';
@@ -188,7 +214,9 @@ class _LoginState extends State<Login> {
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
                                 showSnackbar(context, 'Processing Data');
-                                openScreen(context, MyOrderListScreen());
+
+                                login(emailController.text.toString(),
+                                    passwordController.text.toString());
                               }
                               _formKey.currentState!.save();
                             },

@@ -425,7 +425,7 @@ class _RegsiterState extends State<Regsiter> {
                   ElevatedButton(
                     onPressed: () {
                       Navigator.popUntil(context, (route) => false);
-                      openScreen(context, Login());
+                      // openScreen(context, Login());
                     },
                     child: const Text(
                       'Submit',
@@ -463,6 +463,7 @@ class _RegsiterState extends State<Regsiter> {
     print('Json Data : ${mapdtata}');
     http.Response response = await http.post(Uri.parse(ApiUrl), body: mapdtata);
     var data = jsonDecode(response.body);
+    openScreen(context, Login());
     showSnackbar(context, 'User Created');
     print('DATA : ${data}');
   }
