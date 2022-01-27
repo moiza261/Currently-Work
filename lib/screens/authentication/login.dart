@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mobistylez/helper/constant.dart';
 import 'package:mobistylez/helper/myTextField.dart';
 import 'package:mobistylez/mainscreens/Order_List_Screen.dart';
 import 'package:mobistylez/mainscreens/orderlist.dart';
 import 'package:mobistylez/screens/authentication/forgotpassword/ForgotPassword.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -13,6 +17,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final _formKey = GlobalKey<FormState>();
   bool ishidepassword = true;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -79,57 +84,75 @@ class _LoginState extends State<Login> {
                       const SizedBox(
                         height: 30,
                       ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 15, right: 15),
-                            child: TextFormField(
-                              decoration: const InputDecoration(
-                                labelText: "Driver Email Address",
-                                labelStyle: TextStyle(
-                                    color: Colors.purple,
-                                    fontSize: 16,
-                                    fontFamily: "Poppins"),
-                                hintText: "Enter Your Email",
-                                suffixIcon: Icon(
-                                  Icons.mail,
-                                  color: Colors.purple,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 15, right: 15),
-                            child: TextFormField(
-                              obscureText: ishidepassword,
-                              decoration: InputDecoration(
-                                labelText: "Password",
-                                labelStyle: const TextStyle(
-                                    color: Colors.purple,
-                                    fontSize: 16,
-                                    fontFamily: "Poppins"),
-                                hintText: "Enter Your Password",
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      ishidepassword = !ishidepassword;
-                                    });
-                                  },
-                                  icon: Icon(
-                                    ishidepassword
-                                        ? Icons.visibility_off
-                                        : Icons.visibility,
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 15, right: 15),
+                              child: TextFormField(
+                                validator: (value) {
+                                  if (value == null || !value.contains('@')) {
+                                    return 'Please Enter Correct Email';
+                                  }
+                                  // if (value != '@') {
+                                  //   return 'Please Enter Correct Email';
+                                  // }
+                                },
+                                decoration: const InputDecoration(
+                                  labelText: "Driver Email Address",
+                                  labelStyle: TextStyle(
+                                      color: Colors.purple,
+                                      fontSize: 16,
+                                      fontFamily: "Poppins"),
+                                  hintText: "Enter Your Email",
+                                  suffixIcon: Icon(
+                                    Icons.mail,
                                     color: Colors.purple,
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 15, right: 15),
+                              child: TextFormField(
+                                validator: (value) {
+                                  if (value == null || value.length < 6) {
+                                    return 'Password is too short';
+                                  }
+                                },
+                                obscureText: ishidepassword,
+                                decoration: InputDecoration(
+                                  labelText: "Password",
+                                  labelStyle: const TextStyle(
+                                      color: Colors.purple,
+                                      fontSize: 16,
+                                      fontFamily: "Poppins"),
+                                  hintText: "Enter Your Password",
+                                  suffixIcon: IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        ishidepassword = !ishidepassword;
+                                      });
+                                    },
+                                    icon: Icon(
+                                      ishidepassword
+                                          ? Icons.visibility_off
+                                          : Icons.visibility,
+                                      color: Colors.purple,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(
                         height: 10,
@@ -163,7 +186,11 @@ class _LoginState extends State<Login> {
                         child: Center(
                           child: TextButton(
                             onPressed: () {
-                              openScreen(context, MyOrderListScreen());
+                              if (_formKey.currentState!.validate()) {
+                                showSnackbar(context, 'Processing Data');
+                                openScreen(context, MyOrderListScreen());
+                              }
+                              _formKey.currentState!.save();
                             },
                             child: const Text(
                               'LOGIN',

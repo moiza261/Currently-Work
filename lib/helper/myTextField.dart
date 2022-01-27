@@ -5,7 +5,6 @@ class MyTextField extends StatefulWidget {
   double bottomSpacing;
   double topSpacing;
   double leftSpacing;
-
   TextEditingController textController = TextEditingController();
   MyTextField(
     this.hintText,
@@ -37,7 +36,7 @@ class _MyTextFieldState extends State<MyTextField> {
               const EdgeInsets.only(bottom: 16.0, top: 16.0, left: 15.0),
           fillColor: Colors.white,
           filled: true,
-          hintText: widget.hintText.trim(),
+          hintText: widget.hintText.trim().toString(),
           hintStyle: TextStyle(color: Colors.grey[700], fontFamily: "Poppins"),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20.0),

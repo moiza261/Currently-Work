@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:mobistylez/helper/constant.dart';
 import 'package:mobistylez/helper/myTextField.dart';
 import 'package:mobistylez/screens/authentication/login.dart';
 import 'package:mobistylez/screens/clients_delivery.dart';
+import 'package:http/http.dart' as http;
 
 class Regsiter extends StatefulWidget {
   const Regsiter({Key? key}) : super(key: key);
@@ -15,6 +17,8 @@ class Regsiter extends StatefulWidget {
 }
 
 class _RegsiterState extends State<Regsiter> {
+  late String name, email, phone;
+  final _formKey = GlobalKey<FormState>();
   String buttonText = 'Next';
   File? _pickedImage;
 
@@ -47,66 +51,70 @@ class _RegsiterState extends State<Regsiter> {
             '1',
             style: TextStyle(color: Colors.red),
           ),
-          content: Column(
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(right: 200),
-                child: Text(
-                  'Profile Details',
-                  style: TextStyle(fontFamily: "Poppins"),
+          content: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(right: 200),
+                  child: Text(
+                    'Profile Details',
+                    style: TextStyle(fontFamily: "Poppins"),
+                  ),
                 ),
-              ),
-              MyTextField("First & Last  Name", 5.0, 10.0, 5.0, nameController),
-              const SizedBox(
-                height: 10,
-              ),
-              MyTextField("Email", 5.0, 10.0, 5.0, emailController),
-              const SizedBox(
-                height: 10,
-              ),
-              MyTextField("Mobile Phone", 5.0, 10.0, 5.0, phoneController),
-              const SizedBox(
-                height: 10,
-              ),
-              MyTextField("Password", 5.0, 10.0, 5.0, passwordController),
-              const SizedBox(
-                height: 10,
-              ),
-              MyTextField("Confirm Password", 5.0, 10.0, 5.0,
-                  confirmPasswordController),
-              const SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Row(
-                  children: [
-                    const Text(
-                      'Already have an account',
-                      style: TextStyle(fontFamily: "Poppins", fontSize: 13),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        openScreen(context, const Login());
-                      },
-                      child: const Text(
-                        'Login',
-                        style: TextStyle(
-                            color: Colors.red,
-                            fontFamily: "Poppins",
-                            fontSize: 13),
+                MyTextField(
+                    "First & Last  Name", 5.0, 10.0, 5.0, nameController),
+                const SizedBox(
+                  height: 10,
+                ),
+                MyTextField("Email", 5.0, 10.0, 5.0, emailController),
+                const SizedBox(
+                  height: 10,
+                ),
+                MyTextField("Mobile Phone", 5.0, 10.0, 5.0, phoneController),
+                const SizedBox(
+                  height: 10,
+                ),
+                MyTextField("Password", 5.0, 10.0, 5.0, passwordController),
+                const SizedBox(
+                  height: 10,
+                ),
+                MyTextField("Confirm Password", 5.0, 10.0, 5.0,
+                    confirmPasswordController),
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Row(
+                    children: [
+                      const Text(
+                        'Already have an account',
+                        style: TextStyle(fontFamily: "Poppins", fontSize: 13),
                       ),
-                    )
-                  ],
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          openScreen(context, const Login());
+                        },
+                        child: const Text(
+                          'Login',
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontFamily: "Poppins",
+                              fontSize: 13),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-            ],
+                const SizedBox(
+                  height: 15,
+                ),
+              ],
+            ),
           ),
         ),
         Step(
@@ -218,8 +226,15 @@ class _RegsiterState extends State<Regsiter> {
           controlsBuilder: (BuildContext context, details) {
             return ElevatedButton(
               onPressed: () {
-                if (_currentindex < (stepList().length - 1)) {
-                  _currentindex += 1;
+                // if (_currentindex < (stepList().length - 1)) {
+                //   _currentindex += 1;
+                // }
+                if (_formKey.currentState!.validate()) {
+                  showSnackbar(context, 'Processing Data');
+                  if (_currentindex < (stepList().length - 1)) {
+                    _currentindex += 1;
+                  }
+                  RegisteredUser();
                 }
                 buttonText = buttonText;
                 setState(() {
@@ -410,7 +425,7 @@ class _RegsiterState extends State<Regsiter> {
                   ElevatedButton(
                     onPressed: () {
                       Navigator.popUntil(context, (route) => false);
-                      openScreen(context, ClientDelivery());
+                      openScreen(context, Login());
                     },
                     child: const Text(
                       'Submit',
@@ -435,5 +450,20 @@ class _RegsiterState extends State<Regsiter> {
     } else {
       return null;
     }
+  }
+
+  Future RegisteredUser() async {
+    var ApiUrl = 'https://hello-deployment.herokuapp.com/create';
+    Map mapdtata = {
+      'Name': nameController.text,
+      "Email": emailController.text,
+      "phone": phoneController.text,
+      "password": passwordController.text,
+    };
+    print('Json Data : ${mapdtata}');
+    http.Response response = await http.post(Uri.parse(ApiUrl), body: mapdtata);
+    var data = jsonDecode(response.body);
+    showSnackbar(context, 'User Created');
+    print('DATA : ${data}');
   }
 }
